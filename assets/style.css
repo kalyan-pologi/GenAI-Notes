@@ -377,3 +377,8 @@ body{
 
 /* ─── SCROLLBAR HIDDEN ─────────────────────────────────────── */
 #main::-webkit-scrollbar{width:5px}
+
+/* --- Note diagrams / figures --- */
+.note-figure{margin:1.8rem 0;text-align:center;}
+.note-figure img{max-width:100%;height:auto;border:1px solid #eee;border-radius:10px;background:#fff;padding:8px;}
+.note-figure figcaption{font-size:.85rem;color:#888;margin-top:.6rem;font-family:'JetBrains Mono',monospace;}

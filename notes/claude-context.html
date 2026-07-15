@@ -3,8 +3,26 @@
     <h1>📚 Long Context Windows</h1>
     <p>200K token context — how to use Claude's massive working memory effectively.</p>
   </div>
+
+  <h2>Managing context: /compact vs /clear</h2>
+  <p>
+    When a session's context fills up or quality starts to drop, you have two tools.
+    The rule of thumb: <b>same task → compact</b> (keeps a summary, less history),
+    <b>new task → clear</b> (fresh reset). When unsure, compact is the safer default.
+  </p>
+
+  <figure class="note-figure">
+    <img src="assets/img/compact-vs-clear.svg" alt="Decision flowchart: if same task use /compact, if new task use /clear, otherwise compact; then check /context">
+    <figcaption>Deciding between /compact and /clear during a session</figcaption>
+  </figure>
+
+  <p>
+    After either action, run <code>/context</code> to confirm what was actually dropped —
+    this is the "Detect → Decide → Fix" loop for keeping context clean.
+  </p>
+
   <div class="coming-soon">
     <div class="cs-icon">🚧</div>
-    <h3>Coming Soon</h3>
+    <h3>More Coming Soon</h3>
     <p>Full concept breakdown using the GenAI learning framework.</p>
   </div>
