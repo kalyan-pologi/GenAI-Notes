@@ -7,520 +7,156 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-/* ─── RESET & BASE ─────────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:15px;scroll-behavior:smooth}
-body{
-  background:#080b10;
-  color:#c8d0e0;
-  font-family:'Inter',sans-serif;
-  font-weight:400;
-  line-height:1.6;
-  display:flex;
-  height:100vh;
-  overflow:hidden;
-}
-
-/* ─── CSS VARIABLES ───────────────────────────────────────── */
-:root{
-  --accent:#38bdf8;       /* sky-400 — GenAI blue */
-  --accent2:#818cf8;      /* indigo — secondary */
-  --accent3:#34d399;      /* emerald — third */
-  --bg:#080b10;
-  --sidebar:#0d1117;
-  --surface:#111827;
-  --surface2:#161f2e;
-  --border:#1e2d3d;
-  --border2:#243447;
-  --text:#c8d0e0;
-  --muted:#5a6a80;
-  --muted2:#8899aa;
-  --sidebar-w:264px;
-
-  /* card colors */
-  --c1-bg:#0c1929; --c1:#60a5fa;
-  --c2-bg:#170d2a; --c2:#c084fc;
-  --c3-bg:#0a1f12; --c3:#4ade80;
-  --c4-bg:#1f1208; --c4:#fbbf24;
-  --c5-bg:#1f0a0a; --c5:#f87171;
-  --c6-bg:#081f1f; --c6:#2dd4bf;
-  --c7-bg:#1a1a08; --c7:#facc15;
-  --c8-bg:#1a0a1a; --c8:#f472b6;
-  --c9-bg:#0a1525; --c9:#93c5fd;
-  --c10-bg:#0a1f0a; --c10:#86efac;
-  --c11-bg:#1f180a; --c11:#fb923c;
-  --c12-bg:#0f0f1f; --c12:#a5b4fc;
-  --c13-bg:#0f1f1a; --c13:#34d399;
-  --c14-bg:#1a0f1a; --c14:#e879f9;
-  --c15-bg:#1a1000; --c15:#fdba74;
-}
-
-/* ─── SIDEBAR ─────────────────────────────────────────────── */
-#sidebar{
-  width:var(--sidebar-w);
-  min-width:var(--sidebar-w);
-  background:var(--sidebar);
-  border-right:1px solid var(--border);
-  height:100vh;
-  overflow-y:auto;
-  display:flex;
-  flex-direction:column;
-  scrollbar-width:thin;
-  scrollbar-color:var(--border) transparent;
-}
-#sidebar::-webkit-scrollbar{width:4px}
-#sidebar::-webkit-scrollbar-track{background:transparent}
-#sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
-
-.sidebar-logo{
-  padding:20px 18px 16px;
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  gap:10px;
-  text-decoration:none;
-  cursor:pointer;
-}
-.logo-icon{
-  width:30px;height:30px;
-  border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0;
-}
-.logo-text{
-  font-family:'Syne',sans-serif;
-  font-size:16px;font-weight:700;
-  color:#e2e8f0;letter-spacing:.01em;
-}
-
-.sidebar-section-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;font-weight:500;
-  letter-spacing:.12em;
-  color:var(--muted);
-  text-transform:uppercase;
-  padding:18px 18px 6px;
-}
-
-.sidebar-group{margin-bottom:2px}
-.sidebar-group-header{
-  display:flex;align-items:center;gap:8px;
-  padding:7px 18px;
-  font-size:12.5px;font-weight:500;
-  color:var(--muted2);
-  cursor:pointer;
-  border-radius:0;
-  transition:color .15s;
-  user-select:none;
-  position:relative;
-}
-.sidebar-group-header:hover{color:var(--text)}
-.sidebar-group-header .g-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
-.sidebar-group-header .chevron{
-  margin-left:auto;font-size:10px;
-  color:var(--muted);transition:transform .2s;
-}
-.sidebar-group-header.open .chevron{transform:rotate(90deg)}
-
-.sidebar-group-items{
-  display:none;padding-bottom:4px;
-}
-.sidebar-group-items.open{display:block}
-
-.sidebar-sub-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:9.5px;font-weight:500;
-  letter-spacing:.1em;
-  color:var(--muted);
-  text-transform:uppercase;
-  padding:8px 18px 3px 40px;
-}
-
-.nav-item{
-  display:flex;align-items:center;gap:8px;
-  padding:6px 18px 6px 40px;
-  font-size:12.5px;color:var(--muted2);
-  cursor:pointer;
-  border-left:2px solid transparent;
-  transition:all .12s;
-  text-decoration:none;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-.nav-item:hover{color:var(--text);background:rgba(56,189,248,.04)}
-.nav-item.active{
-  color:var(--accent);
-  background:rgba(56,189,248,.08);
-  border-left-color:var(--accent);
-}
-.nav-item-top{
-  padding-left:18px;
-}
-.nav-item-top .nav-dot{font-size:13px;width:18px;text-align:center;flex-shrink:0}
-
-/* ─── MAIN CONTENT ────────────────────────────────────────── */
-#main{
-  flex:1;
-  overflow-y:auto;
-  height:100vh;
-  scrollbar-width:thin;
-  scrollbar-color:var(--border) transparent;
-}
-#main::-webkit-scrollbar{width:5px}
-#main::-webkit-scrollbar-track{background:transparent}
-#main::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
-
-/* ─── SECTIONS ─────────────────────────────────────────────── */
-.section{
-  display:none;
-  padding:40px 48px 80px;
-  max-width:1100px;
-  animation:fadeIn .2s ease;
-}
-.section.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-
-/* ─── SECTION HEADER ──────────────────────────────────────── */
-.section-header{margin-bottom:36px}
-.tag{
-  display:inline-block;
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;font-weight:500;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:var(--accent);
-  background:rgba(56,189,248,.1);
-  border:1px solid rgba(56,189,248,.2);
-  padding:3px 10px;border-radius:4px;
-  margin-bottom:12px;
-}
-.section-header h1{
-  font-family:'Syne',sans-serif;
-  font-size:28px;font-weight:700;
-  color:#e2e8f0;line-height:1.2;
-  margin-bottom:8px;letter-spacing:-.01em;
-}
-.section-header p{color:var(--muted2);font-size:14px}
-
-/* ─── GRID ─────────────────────────────────────────────────── */
-.grid3{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-bottom:14px;
-}
-.grid2{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-bottom:14px;
-}
-
-/* ─── SECTION LABEL (row title) ─────────────────────────── */
-.cs-section-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;font-weight:500;
-  letter-spacing:.12em;text-transform:uppercase;
-  color:var(--muted);
-  margin:28px 0 12px;
-  display:flex;align-items:center;gap:8px;
-}
-.cs-section-label::after{
-  content:'';flex:1;
-  height:1px;background:var(--border);
-}
-
-/* ─── CARDS ─────────────────────────────────────────────────── */
-.card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:18px;
-  font-size:13px;
-  transition:border-color .15s;
-}
-.card:hover{border-color:var(--border2)}
-
-.card h3{
-  font-family:'Syne',sans-serif;
-  font-size:11px;font-weight:600;
-  letter-spacing:.1em;text-transform:uppercase;
-  margin-bottom:12px;
-}
-
-/* sub-label */
-.sl{
-  font-family:'JetBrains Mono',monospace;
-  font-size:10px;font-weight:500;
-  letter-spacing:.08em;text-transform:uppercase;
-  color:var(--muted);
-  margin:12px 0 6px;
-}
-
-/* bullet */
-.b{
-  padding:3px 0;
-  color:var(--text);
-  line-height:1.55;
-  font-size:12.5px;
-}
-.b::before{content:'→ ';color:var(--muted)}
-.b b{font-weight:500}
-
-/* key-value row */
-.row{
-  display:flex;align-items:baseline;
-  gap:8px;padding:4px 0;
-  border-bottom:1px solid var(--border);
-  font-size:12px;
-}
-.row:last-of-type{border-bottom:none}
-.k{color:var(--muted2);min-width:100px;flex-shrink:0;font-size:11.5px}
-.v{color:var(--text);font-weight:500;font-size:12.5px}
-
-/* divider */
-.sep{height:1px;background:var(--border);margin:12px 0}
-
-/* note */
-.note{
-  font-size:11.5px;color:var(--muted2);
-  line-height:1.55;margin-top:6px;
-}
-.note b{font-weight:500;color:var(--muted2)}
-
-/* new badge */
-.new{
-  display:inline-block;
-  font-family:'JetBrains Mono',monospace;
-  font-size:9px;font-weight:500;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:#34d399;background:rgba(52,211,153,.1);
-  border:1px solid rgba(52,211,153,.25);
-  padding:1px 6px;border-radius:3px;
-  margin-left:6px;vertical-align:middle;
-}
-
-/* ─── CARD COLORS ─────────────────────────────────────────── */
-.c1{background:var(--c1-bg);border-color:rgba(96,165,250,.15)} .c1 h3{color:var(--c1)}
-.c2{background:var(--c2-bg);border-color:rgba(192,132,252,.15)} .c2 h3{color:var(--c2)}
-.c3{background:var(--c3-bg);border-color:rgba(74,222,128,.15)}  .c3 h3{color:var(--c3)}
-.c4{background:var(--c4-bg);border-color:rgba(251,191,36,.15)}  .c4 h3{color:var(--c4)}
-.c5{background:var(--c5-bg);border-color:rgba(248,113,113,.15)} .c5 h3{color:var(--c5)}
-.c6{background:var(--c6-bg);border-color:rgba(45,212,191,.15)}  .c6 h3{color:var(--c6)}
-.c7{background:var(--c7-bg);border-color:rgba(250,204,21,.15)}  .c7 h3{color:var(--c7)}
-.c8{background:var(--c8-bg);border-color:rgba(244,114,182,.15)} .c8 h3{color:var(--c8)}
-.c9{background:var(--c9-bg);border-color:rgba(147,197,253,.15)} .c9 h3{color:var(--c9)}
-.c10{background:var(--c10-bg);border-color:rgba(134,239,172,.15)}.c10 h3{color:var(--c10)}
-.c11{background:var(--c11-bg);border-color:rgba(251,146,60,.15)} .c11 h3{color:var(--c11)}
-.c12{background:var(--c12-bg);border-color:rgba(165,180,252,.15)}.c12 h3{color:var(--c12)}
-.c13{background:var(--c13-bg);border-color:rgba(52,211,153,.15)} .c13 h3{color:var(--c13)}
-.c14{background:var(--c14-bg);border-color:rgba(232,121,249,.15)}.c14 h3{color:var(--c14)}
-.c15{background:var(--c15-bg);border-color:rgba(253,186,116,.15)}.c15 h3{color:var(--c15)}
-
-/* ─── COMING SOON ──────────────────────────────────────────── */
-.coming-soon{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:80px 40px;
-  border:1px dashed var(--border2);
-  border-radius:12px;
-  text-align:center;
-  margin-top:8px;
-}
-.cs-icon{font-size:36px;margin-bottom:16px;opacity:.6}
-.coming-soon h3{
-  font-family:'Syne',sans-serif;
-  font-size:16px;font-weight:600;
-  color:var(--muted2);margin-bottom:8px;
-  text-transform:none;letter-spacing:0;
-}
-.coming-soon p{color:var(--muted);font-size:13px;max-width:320px}
-
-/* ─── HOME HERO ────────────────────────────────────────────── */
-#home.active{
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:48px 48px 80px;
-  text-align:center;
-}
-.home-logo{
-  width:64px;height:64px;border-radius:16px;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;
-  font-size:30px;margin:0 auto 20px;
-  box-shadow:0 0 40px rgba(56,189,248,.2);
-}
-.home-title{
-  font-family:'Syne',sans-serif;
-  font-size:48px;font-weight:700;
-  color:#e2e8f0;letter-spacing:-.03em;
-  line-height:1.1;margin-bottom:40px;
-}
-.home-title span{
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
-.home-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;width:100%;max-width:820px;
-}
-.home-card{
-  background:var(--surface);
-  border:1px solid var(--border);
-  border-radius:12px;padding:24px 20px;
-  cursor:pointer;text-align:left;
-  transition:all .2s;
-  text-decoration:none;
-}
-.home-card:hover{border-color:var(--accent);background:rgba(56,189,248,.05);transform:translateY(-2px)}
-.home-card-icon{font-size:24px;margin-bottom:12px}
-.home-card-title{
-  font-family:'Syne',sans-serif;
-  font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:6px;
-}
-.home-card-sub{font-size:12px;color:var(--muted2);line-height:1.5}
-.home-grid2{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;width:100%;max-width:820px;margin-top:16px;
-}
-
-/* ─── SCROLLBAR HIDDEN ─────────────────────────────────────── */
-#main::-webkit-scrollbar{width:5px}
-</style>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
 <!-- ═══════════════ SIDEBAR ═══════════════ -->
 <nav id="sidebar">
-  <div class="sidebar-logo" onclick="showSection('home')">
+  <div class="sidebar-logo">
     <div class="logo-icon">🤖</div>
     <div class="logo-text">GenAI Notes</div>
   </div>
 
   <!-- GETTING STARTED -->
   <div class="sidebar-section-label">Getting Started</div>
-  <div class="nav-item nav-item-top active" onclick="showSection('home')" id="nav-home">
+  <div class="nav-item nav-item-top" data-note="home">
     <span class="nav-dot">🏠</span> Home
   </div>
 
-  <!-- FOUNDATIONS -->
+  <!-- CORE CONCEPTS -->
   <div class="sidebar-section-label">Core Concepts</div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
+      <span class="g-icon">🟠</span> Claude & Anthropic <span class="chevron">›</span>
+    </div>
+    <div class="sidebar-group-items">
+      <div class="nav-item" data-note="claude-intro">Claude Overview</div>
+      <div class="nav-item" data-note="claude-api">Claude API</div>
+      <div class="nav-item" data-note="claude-models">Model Comparison</div>
+      <div class="nav-item" data-note="claude-tooluse">Tool Use & Function Calling</div>
+      <div class="nav-item" data-note="claude-vision">Vision & Multimodal</div>
+      <div class="nav-item" data-note="claude-context">Long Context Windows</div>
+      <div class="nav-item" data-note="claude-streaming">Streaming & Real-time</div>
+      <div class="nav-item" data-note="claude-caching">Prompt Caching</div>
+    </div>
+  </div>
+
+  <div class="sidebar-group">
+    <div class="sidebar-group-header">
       <span class="g-icon">🧠</span> Foundations <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('llm')" id="nav-llm">LLMs & How They Work</div>
-      <div class="nav-item" onclick="showSection('tokens')" id="nav-tokens">Tokens & Tokenization</div>
-      <div class="nav-item" onclick="showSection('context')" id="nav-context">Context Window</div>
-      <div class="nav-item" onclick="showSection('temperature')" id="nav-temperature">Temperature & Sampling</div>
-      <div class="nav-item" onclick="showSection('prompting')" id="nav-prompting">Prompt Engineering</div>
-      <div class="nav-item" onclick="showSection('sysprompt')" id="nav-sysprompt">System Prompts</div>
-      <div class="nav-item" onclick="showSection('fewshot')" id="nav-fewshot">Few-Shot & Zero-Shot</div>
-      <div class="nav-item" onclick="showSection('cot')" id="nav-cot">Chain-of-Thought (CoT)</div>
-      <div class="nav-item" onclick="showSection('hallucination')" id="nav-hallucination">Hallucinations & Grounding</div>
+      <div class="nav-item" data-note="llm">LLMs & How They Work</div>
+      <div class="nav-item" data-note="tokens">Tokens & Tokenization</div>
+      <div class="nav-item" data-note="context">Context Window</div>
+      <div class="nav-item" data-note="temperature">Temperature & Sampling</div>
+      <div class="nav-item" data-note="prompting">Prompt Engineering</div>
+      <div class="nav-item" data-note="sysprompt">System Prompts</div>
+      <div class="nav-item" data-note="fewshot">Few-Shot & Zero-Shot</div>
+      <div class="nav-item" data-note="cot">Chain-of-Thought (CoT)</div>
+      <div class="nav-item" data-note="hallucination">Hallucinations & Grounding</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🔢</span> Embeddings & Vector Search <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('embeddings')" id="nav-embeddings">Embeddings</div>
-      <div class="nav-item" onclick="showSection('semanticsearch')" id="nav-semanticsearch">Semantic Search</div>
-      <div class="nav-item" onclick="showSection('vectordb')" id="nav-vectordb">Vector Databases</div>
-      <div class="nav-item" onclick="showSection('similarity')" id="nav-similarity">Similarity Metrics</div>
-      <div class="nav-item" onclick="showSection('chunking')" id="nav-chunking">Chunking Strategies</div>
-      <div class="nav-item" onclick="showSection('hybridsearch')" id="nav-hybridsearch">Hybrid Search</div>
+      <div class="nav-item" data-note="embeddings">Embeddings</div>
+      <div class="nav-item" data-note="semanticsearch">Semantic Search</div>
+      <div class="nav-item" data-note="vectordb">Vector Databases</div>
+      <div class="nav-item" data-note="similarity">Similarity Metrics</div>
+      <div class="nav-item" data-note="chunking">Chunking Strategies</div>
+      <div class="nav-item" data-note="hybridsearch">Hybrid Search</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">📥</span> RAG <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('ragbasics')" id="nav-ragbasics">RAG Fundamentals</div>
-      <div class="nav-item" onclick="showSection('ragpipeline')" id="nav-ragpipeline">RAG Pipeline Design</div>
-      <div class="nav-item" onclick="showSection('advancedrag')" id="nav-advancedrag">Naive vs Advanced RAG</div>
-      <div class="nav-item" onclick="showSection('reranking')" id="nav-reranking">Re-ranking</div>
-      <div class="nav-item" onclick="showSection('contexteng')" id="nav-contexteng">Context Engineering</div>
-      <div class="nav-item" onclick="showSection('rageval')" id="nav-rageval">RAG Evaluation</div>
+      <div class="nav-item" data-note="ragbasics">RAG Fundamentals</div>
+      <div class="nav-item" data-note="ragpipeline">RAG Pipeline Design</div>
+      <div class="nav-item" data-note="advancedrag">Naive vs Advanced RAG</div>
+      <div class="nav-item" data-note="reranking">Re-ranking</div>
+      <div class="nav-item" data-note="contexteng">Context Engineering</div>
+      <div class="nav-item" data-note="rageval">RAG Evaluation</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🤖</span> Agents & Orchestration <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('agents')" id="nav-agents">AI Agents</div>
-      <div class="nav-item" onclick="showSection('react')" id="nav-react">ReAct Pattern</div>
-      <div class="nav-item" onclick="showSection('tooluse')" id="nav-tooluse">Tool Use & Function Calling</div>
-      <div class="nav-item" onclick="showSection('mcp')" id="nav-mcp">Model Context Protocol (MCP)</div>
-      <div class="nav-item" onclick="showSection('memory')" id="nav-memory">Memory Types</div>
-      <div class="nav-item" onclick="showSection('planning')" id="nav-planning">Planning & Task Decomposition</div>
-      <div class="nav-item" onclick="showSection('multiagent')" id="nav-multiagent">Multi-Agent Systems</div>
-      <div class="nav-item" onclick="showSection('agenticloops')" id="nav-agenticloops">Agentic Loops & Stopping</div>
+      <div class="nav-item" data-note="agents">AI Agents</div>
+      <div class="nav-item" data-note="react">ReAct Pattern</div>
+      <div class="nav-item" data-note="tooluse">Tool Use & Function Calling</div>
+      <div class="nav-item" data-note="mcp">Model Context Protocol (MCP)</div>
+      <div class="nav-item" data-note="memory">Memory Types</div>
+      <div class="nav-item" data-note="planning">Planning & Task Decomposition</div>
+      <div class="nav-item" data-note="multiagent">Multi-Agent Systems</div>
+      <div class="nav-item" data-note="agenticloops">Agentic Loops & Stopping</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🔧</span> Frameworks & Tooling <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('langchain')" id="nav-langchain">LangChain</div>
-      <div class="nav-item" onclick="showSection('langgraph')" id="nav-langgraph">LangGraph</div>
-      <div class="nav-item" onclick="showSection('llamaindex')" id="nav-llamaindex">LlamaIndex</div>
-      <div class="nav-item" onclick="showSection('openaisdk')" id="nav-openaisdk">OpenAI SDK</div>
-      <div class="nav-item" onclick="showSection('claudesdk')" id="nav-claudesdk">Anthropic SDK (Claude)</div>
-      <div class="nav-item" onclick="showSection('huggingface')" id="nav-huggingface">Hugging Face</div>
+      <div class="nav-item" data-note="langchain">LangChain</div>
+      <div class="nav-item" data-note="langgraph">LangGraph</div>
+      <div class="nav-item" data-note="llamaindex">LlamaIndex</div>
+      <div class="nav-item" data-note="openaisdk">OpenAI SDK</div>
+      <div class="nav-item" data-note="claudesdk">Anthropic SDK (Claude)</div>
+      <div class="nav-item" data-note="huggingface">Hugging Face</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">⚙️</span> Fine-Tuning & Alignment <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('finetuning')" id="nav-finetuning">Fine-Tuning Fundamentals</div>
-      <div class="nav-item" onclick="showSection('lora')" id="nav-lora">LoRA & QLoRA</div>
-      <div class="nav-item" onclick="showSection('rlhf')" id="nav-rlhf">RLHF</div>
-      <div class="nav-item" onclick="showSection('peft')" id="nav-peft">PEFT</div>
-      <div class="nav-item" onclick="showSection('instructiontune')" id="nav-instructiontune">Instruction Tuning</div>
-      <div class="nav-item" onclick="showSection('ragvsfine')" id="nav-ragvsfine">Fine-Tune vs RAG vs Prompt</div>
+      <div class="nav-item" data-note="finetuning">Fine-Tuning Fundamentals</div>
+      <div class="nav-item" data-note="lora">LoRA & QLoRA</div>
+      <div class="nav-item" data-note="rlhf">RLHF</div>
+      <div class="nav-item" data-note="peft">PEFT</div>
+      <div class="nav-item" data-note="instructiontune">Instruction Tuning</div>
+      <div class="nav-item" data-note="ragvsfine">Fine-Tune vs RAG vs Prompt</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🎨</span> Multimodal & Diffusion <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('multimodal')" id="nav-multimodal">Multimodal Models</div>
-      <div class="nav-item" onclick="showSection('diffusion')" id="nav-diffusion">Diffusion Models</div>
-      <div class="nav-item" onclick="showSection('imagegen')" id="nav-imagegen">Image Generation Pipeline</div>
-      <div class="nav-item" onclick="showSection('vlm')" id="nav-vlm">Vision-Language Models (VLMs)</div>
+      <div class="nav-item" data-note="multimodal">Multimodal Models</div>
+      <div class="nav-item" data-note="diffusion">Diffusion Models</div>
+      <div class="nav-item" data-note="imagegen">Image Generation Pipeline</div>
+      <div class="nav-item" data-note="vlm">Vision-Language Models (VLMs)</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🚀</span> Production & Reliability <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('latency')" id="nav-latency">Latency & Throughput</div>
-      <div class="nav-item" onclick="showSection('streaming')" id="nav-streaming">Streaming Responses</div>
-      <div class="nav-item" onclick="showSection('costopt')" id="nav-costopt">Cost Optimization</div>
-      <div class="nav-item" onclick="showSection('llmcaching')" id="nav-llmcaching">Caching LLM Responses</div>
-      <div class="nav-item" onclick="showSection('promptinjection')" id="nav-promptinjection">Prompt Injection & Security</div>
-      <div class="nav-item" onclick="showSection('guardrails')" id="nav-guardrails">Guardrails & Validation</div>
-      <div class="nav-item" onclick="showSection('observability')" id="nav-observability">Observability & Tracing</div>
-      <div class="nav-item" onclick="showSection('evals')" id="nav-evals">Evals & Benchmarking</div>
+      <div class="nav-item" data-note="latency">Latency & Throughput</div>
+      <div class="nav-item" data-note="streaming">Streaming Responses</div>
+      <div class="nav-item" data-note="costopt">Cost Optimization</div>
+      <div class="nav-item" data-note="llmcaching">Caching LLM Responses</div>
+      <div class="nav-item" data-note="promptinjection">Prompt Injection & Security</div>
+      <div class="nav-item" data-note="guardrails">Guardrails & Validation</div>
+      <div class="nav-item" data-note="observability">Observability & Tracing</div>
+      <div class="nav-item" data-note="evals">Evals & Benchmarking</div>
     </div>
   </div>
 
@@ -528,56 +164,56 @@ body{
   <div class="sidebar-section-label">Key Technologies</div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">💡</span> Models & APIs <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('openai')" id="nav-openai">OpenAI API</div>
-      <div class="nav-item" onclick="showSection('claude')" id="nav-claude">Claude (Anthropic)</div>
-      <div class="nav-item" onclick="showSection('gemini')" id="nav-gemini">Gemini (Google)</div>
+      <div class="nav-item" data-note="openai">OpenAI API</div>
+      <div class="nav-item" data-note="claude">Claude (Anthropic)</div>
+      <div class="nav-item" data-note="gemini">Gemini (Google)</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🗄️</span> Vector Stores <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('pinecone')" id="nav-pinecone">Pinecone</div>
-      <div class="nav-item" onclick="showSection('chroma')" id="nav-chroma">Chroma</div>
-      <div class="nav-item" onclick="showSection('weaviate')" id="nav-weaviate">Weaviate</div>
-      <div class="nav-item" onclick="showSection('pgvector')" id="nav-pgvector">pgvector</div>
+      <div class="nav-item" data-note="pinecone">Pinecone</div>
+      <div class="nav-item" data-note="chroma">Chroma</div>
+      <div class="nav-item" data-note="weaviate">Weaviate</div>
+      <div class="nav-item" data-note="pgvector">pgvector</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">⚡</span> Infra & Serving <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('ollama')" id="nav-ollama">Ollama (local models)</div>
-      <div class="nav-item" onclick="showSection('vllm')" id="nav-vllm">vLLM (serving)</div>
+      <div class="nav-item" data-note="ollama">Ollama (local models)</div>
+      <div class="nav-item" data-note="vllm">vLLM (serving)</div>
     </div>
   </div>
 
   <!-- PATTERNS -->
   <div class="sidebar-section-label">Patterns</div>
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🧩</span> GenAI Patterns <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('p-rag')" id="nav-p-rag">RAG Pattern</div>
-      <div class="nav-item" onclick="showSection('p-agent')" id="nav-p-agent">Agent Loop Pattern</div>
-      <div class="nav-item" onclick="showSection('p-multiagent')" id="nav-p-multiagent">Multi-Agent Pattern</div>
-      <div class="nav-item" onclick="showSection('p-memory')" id="nav-p-memory">Memory Pattern</div>
-      <div class="nav-item" onclick="showSection('p-streaming')" id="nav-p-streaming">Streaming Pattern</div>
-      <div class="nav-item" onclick="showSection('p-caching')" id="nav-p-caching">Caching Pattern</div>
-      <div class="nav-item" onclick="showSection('p-eval')" id="nav-p-eval">Eval Pattern</div>
-      <div class="nav-item" onclick="showSection('p-guardrail')" id="nav-p-guardrail">Guardrail Pattern</div>
-      <div class="nav-item" onclick="showSection('p-fanout')" id="nav-p-fanout">Fan-out Pattern</div>
-      <div class="nav-item" onclick="showSection('p-summarize')" id="nav-p-summarize">Summarization Pattern</div>
-      <div class="nav-item" onclick="showSection('p-toolrouter')" id="nav-p-toolrouter">Tool Router Pattern</div>
+      <div class="nav-item" data-note="p-rag">RAG Pattern</div>
+      <div class="nav-item" data-note="p-agent">Agent Loop Pattern</div>
+      <div class="nav-item" data-note="p-multiagent">Multi-Agent Pattern</div>
+      <div class="nav-item" data-note="p-memory">Memory Pattern</div>
+      <div class="nav-item" data-note="p-streaming">Streaming Pattern</div>
+      <div class="nav-item" data-note="p-caching">Caching Pattern</div>
+      <div class="nav-item" data-note="p-eval">Eval Pattern</div>
+      <div class="nav-item" data-note="p-guardrail">Guardrail Pattern</div>
+      <div class="nav-item" data-note="p-fanout">Fan-out Pattern</div>
+      <div class="nav-item" data-note="p-summarize">Summarization Pattern</div>
+      <div class="nav-item" data-note="p-toolrouter">Tool Router Pattern</div>
     </div>
   </div>
 
@@ -585,46 +221,46 @@ body{
   <div class="sidebar-section-label">Question Breakdowns</div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🛒</span> Classic GenAI Products <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('q-chatgpt')" id="nav-q-chatgpt">Design ChatGPT</div>
-      <div class="nav-item" onclick="showSection('q-copilot')" id="nav-q-copilot">Design GitHub Copilot</div>
-      <div class="nav-item" onclick="showSection('q-cursor')" id="nav-q-cursor">Design Cursor AI</div>
-      <div class="nav-item" onclick="showSection('q-perplexity')" id="nav-q-perplexity">Design Perplexity</div>
+      <div class="nav-item" data-note="q-chatgpt">Design ChatGPT</div>
+      <div class="nav-item" data-note="q-copilot">Design GitHub Copilot</div>
+      <div class="nav-item" data-note="q-cursor">Design Cursor AI</div>
+      <div class="nav-item" data-note="q-perplexity">Design Perplexity</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">📄</span> RAG Systems <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('q-docsearch')" id="nav-q-docsearch">Document Search Bot</div>
-      <div class="nav-item" onclick="showSection('q-codeassist')" id="nav-q-codeassist">Code Assistant</div>
-      <div class="nav-item" onclick="showSection('q-emailagent')" id="nav-q-emailagent">Email Agent</div>
+      <div class="nav-item" data-note="q-docsearch">Document Search Bot</div>
+      <div class="nav-item" data-note="q-codeassist">Code Assistant</div>
+      <div class="nav-item" data-note="q-emailagent">Email Agent</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🕹️</span> Agent Systems <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('q-researchagent')" id="nav-q-researchagent">Research Agent</div>
-      <div class="nav-item" onclick="showSection('q-customerservice')" id="nav-q-customerservice">Customer Service Agent</div>
-      <div class="nav-item" onclick="showSection('q-codegen')" id="nav-q-codegen">Code Generation Agent</div>
+      <div class="nav-item" data-note="q-researchagent">Research Agent</div>
+      <div class="nav-item" data-note="q-customerservice">Customer Service Agent</div>
+      <div class="nav-item" data-note="q-codegen">Code Generation Agent</div>
     </div>
   </div>
 
   <div class="sidebar-group">
-    <div class="sidebar-group-header" onclick="toggleGroup(this)">
+    <div class="sidebar-group-header">
       <span class="g-icon">🖼️</span> Multimodal <span class="chevron">›</span>
     </div>
     <div class="sidebar-group-items">
-      <div class="nav-item" onclick="showSection('q-imagegen')" id="nav-q-imagegen">Image Generation System</div>
-      <div class="nav-item" onclick="showSection('q-videoanalysis')" id="nav-q-videoanalysis">Video Analysis Pipeline</div>
+      <div class="nav-item" data-note="q-imagegen">Image Generation System</div>
+      <div class="nav-item" data-note="q-videoanalysis">Video Analysis Pipeline</div>
     </div>
   </div>
 
@@ -632,290 +268,9 @@ body{
 
 <!-- ═══════════════ MAIN CONTENT ═══════════════ -->
 <main id="main">
-
-<!-- ── HOME ───────────────────────────────────────────────── -->
-<div class="section active" id="home">
-  <div class="home-logo">🤖</div>
-  <h1 class="home-title">GenAI <span>Notes</span></h1>
-
-  <div class="home-grid">
-    <div class="home-card" onclick="openGroup('Foundations')">
-      <div class="home-card-icon">🧠</div>
-      <div class="home-card-title">Foundations</div>
-      <div class="home-card-sub">LLMs, tokens, context windows, prompting, CoT, hallucinations</div>
-    </div>
-    <div class="home-card" onclick="openGroup('Embeddings & Vector Search')">
-      <div class="home-card-icon">🔢</div>
-      <div class="home-card-title">Embeddings & Vector Search</div>
-      <div class="home-card-sub">Semantic search, vector DBs, chunking, hybrid search</div>
-    </div>
-    <div class="home-card" onclick="openGroup('RAG')">
-      <div class="home-card-icon">📥</div>
-      <div class="home-card-title">RAG</div>
-      <div class="home-card-sub">Retrieval-augmented generation, pipeline design, evaluation</div>
-    </div>
-    <div class="home-card" onclick="openGroup('Agents & Orchestration')">
-      <div class="home-card-icon">🤖</div>
-      <div class="home-card-title">Agents & Orchestration</div>
-      <div class="home-card-sub">ReAct, tool use, MCP, memory, multi-agent systems</div>
-    </div>
-    <div class="home-card" onclick="openGroup('Frameworks & Tooling')">
-      <div class="home-card-icon">🔧</div>
-      <div class="home-card-title">Frameworks & Tooling</div>
-      <div class="home-card-sub">LangChain, LangGraph, LlamaIndex, OpenAI SDK, Claude SDK</div>
-    </div>
-    <div class="home-card" onclick="openGroup('Production & Reliability')">
-      <div class="home-card-icon">🚀</div>
-      <div class="home-card-title">Production & Reliability</div>
-      <div class="home-card-sub">Latency, streaming, cost, guardrails, evals, observability</div>
-    </div>
-  </div>
-  <div class="home-grid2">
-    <div class="home-card" onclick="openGroup('Fine-Tuning & Alignment')">
-      <div class="home-card-icon">⚙️</div>
-      <div class="home-card-title">Fine-Tuning & Alignment</div>
-      <div class="home-card-sub">LoRA, RLHF, PEFT, when to fine-tune vs RAG</div>
-    </div>
-    <div class="home-card" onclick="openGroup('GenAI Patterns')">
-      <div class="home-card-icon">🧩</div>
-      <div class="home-card-title">Patterns</div>
-      <div class="home-card-sub">RAG, agent loop, fan-out, guardrail, tool router and more</div>
-    </div>
-    <div class="home-card" onclick="openGroup('Classic GenAI Products')">
-      <div class="home-card-icon">🛒</div>
-      <div class="home-card-title">Question Breakdowns</div>
-      <div class="home-card-sub">Design ChatGPT, Copilot, Perplexity, Cursor and more</div>
-    </div>
-  </div>
-</div>
-
-<!-- ════════════════════════════════════════════════════════════
-     FOUNDATIONS
-     ════════════════════════════════════════════════════════════ -->
-
-<div class="section" id="llm">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>🧠 LLMs & How They Work</h1>
-    <p>What a large language model actually is, and how it generates text.</p>
-  </div>
-  <div class="coming-soon">
-    <div class="cs-icon">🚧</div>
-    <h3>Coming Soon</h3>
-    <p>Full concept breakdown using the GenAI learning framework.</p>
-  </div>
-</div>
-
-<div class="section" id="tokens">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>🔤 Tokens & Tokenization</h1>
-    <p>How text is split into chunks and why it matters for cost, context, and behavior.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="context">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>📏 Context Window</h1>
-    <p>The LLM's working memory — what fits, what doesn't, and how to manage it.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="temperature">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>🌡️ Temperature & Sampling</h1>
-    <p>How randomness controls creativity vs. determinism in model outputs.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="prompting">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>✍️ Prompt Engineering</h1>
-    <p>Techniques for writing prompts that reliably produce the output you want.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="sysprompt">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>⚙️ System Prompts</h1>
-    <p>How to configure model behavior, persona, and constraints at the system level.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="fewshot">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>📚 Few-Shot & Zero-Shot Learning</h1>
-    <p>Teaching the model by example — and when no examples are needed at all.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="cot">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>🔗 Chain-of-Thought (CoT)</h1>
-    <p>Making LLMs reason step by step to improve accuracy on complex tasks.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<div class="section" id="hallucination">
-  <div class="section-header">
-    <div class="tag">Foundations</div>
-    <h1>👻 Hallucinations & Grounding</h1>
-    <p>Why LLMs confidently make things up — and how to prevent it.</p>
-  </div>
-  <div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div>
-</div>
-
-<!-- ════════ EMBEDDINGS ════════ -->
-<div class="section" id="embeddings"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>🔢 Embeddings</h1><p>Representing meaning as numbers — the foundation of semantic AI.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="semanticsearch"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>🔍 Semantic Search</h1><p>Finding meaning, not just keywords — how AI search actually works.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="vectordb"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>🗄️ Vector Databases</h1><p>Storing and querying millions of embeddings at speed — Pinecone, Chroma, pgvector.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="similarity"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>📐 Similarity Metrics</h1><p>Cosine, dot product, L2 — how we measure how close two vectors are.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="chunking"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>✂️ Chunking Strategies</h1><p>How to split documents so embeddings are meaningful and retrieval is accurate.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="hybridsearch"><div class="section-header"><div class="tag">Embeddings & Vector Search</div><h1>⚡ Hybrid Search</h1><p>Combining dense vector search with sparse keyword search for best results.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ RAG ════════ -->
-<div class="section" id="ragbasics"><div class="section-header"><div class="tag">RAG</div><h1>📥 RAG Fundamentals</h1><p>Retrieval-Augmented Generation — giving LLMs access to your data at query time.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="ragpipeline"><div class="section-header"><div class="tag">RAG</div><h1>🔄 RAG Pipeline Design</h1><p>Index → retrieve → augment → generate — building it end to end.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="advancedrag"><div class="section-header"><div class="tag">RAG</div><h1>🚀 Naive vs Advanced RAG</h1><p>From basic retrieval to HyDE, multi-query, and parent-document strategies.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="reranking"><div class="section-header"><div class="tag">RAG</div><h1>🏆 Re-ranking</h1><p>Scoring and reordering retrieved chunks for better relevance before generation.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="contexteng"><div class="section-header"><div class="tag">RAG</div><h1>🎯 Context Engineering</h1><p>What goes into the context window, and how to pack it optimally.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="rageval"><div class="section-header"><div class="tag">RAG</div><h1>📊 RAG Evaluation</h1><p>How to measure if your RAG system is actually working — RAGAS, faithfulness, recall.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ AGENTS ════════ -->
-<div class="section" id="agents"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🤖 AI Agents</h1><p>LLMs that loop: think → act → observe → repeat until done.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="react"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>⚡ ReAct Pattern</h1><p>Reason + Act — the loop that powers most modern AI agents.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="tooluse"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🔨 Tool Use & Function Calling</h1><p>Giving LLMs the ability to call APIs, run code, search the web, and more.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="mcp"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🔌 Model Context Protocol (MCP)</h1><p>The standard for connecting LLMs to tools, APIs, and data sources.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="memory"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🧠 Memory Types</h1><p>Short-term, long-term, episodic — how agents remember across conversations.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="planning"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>📋 Planning & Task Decomposition</h1><p>How agents break big goals into ordered subtasks and execute them.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="multiagent"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🕸️ Multi-Agent Systems</h1><p>Planner → executor → evaluator — agents coordinating to solve complex tasks.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="agenticloops"><div class="section-header"><div class="tag">Agents & Orchestration</div><h1>🔁 Agentic Loops & Stopping Conditions</h1><p>When to keep looping, when to stop, and how to avoid infinite loops.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ FRAMEWORKS ════════ -->
-<div class="section" id="langchain"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>⛓️ LangChain</h1><p>The most popular framework for building LLM applications and chains.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="langgraph"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>🕸️ LangGraph</h1><p>Graph-based orchestration for stateful, multi-step agent workflows.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="llamaindex"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>🦙 LlamaIndex</h1><p>Data framework for RAG — ingestion, indexing, querying over your data.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="openaisdk"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>🟢 OpenAI SDK</h1><p>The Python and JS SDKs for calling GPT, embeddings, and DALL-E APIs.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="claudesdk"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>🟠 Anthropic SDK (Claude)</h1><p>Building with Claude — messages API, tool use, streaming, and vision.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="huggingface"><div class="section-header"><div class="tag">Frameworks & Tooling</div><h1>🤗 Hugging Face</h1><p>The hub for open-source models, datasets, and the Transformers library.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ FINE-TUNING ════════ -->
-<div class="section" id="finetuning"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>🎯 Fine-Tuning Fundamentals</h1><p>Training a pre-trained model further on your own domain data.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="lora"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>🪢 LoRA & QLoRA</h1><p>Parameter-efficient fine-tuning that doesn't require a full model retraining.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="rlhf"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>🏅 RLHF</h1><p>Reinforcement Learning from Human Feedback — why models are actually helpful.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="peft"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>⚡ PEFT</h1><p>Parameter-Efficient Fine-Tuning — adapters, prefix tuning, and prompt tuning.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="instructiontune"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>📝 Instruction Tuning</h1><p>Teaching models to follow instructions — the bridge from base model to assistant.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="ragvsfine"><div class="section-header"><div class="tag">Fine-Tuning & Alignment</div><h1>⚖️ Fine-Tune vs RAG vs Prompt</h1><p>The decision framework — when each approach wins and when it fails.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ MULTIMODAL ════════ -->
-<div class="section" id="multimodal"><div class="section-header"><div class="tag">Multimodal & Diffusion</div><h1>🎨 Multimodal Models</h1><p>Models that understand and generate across text, image, audio, and video.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="diffusion"><div class="section-header"><div class="tag">Multimodal & Diffusion</div><h1>🌊 Diffusion Models</h1><p>How image generation works — adding noise, then learning to remove it.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="imagegen"><div class="section-header"><div class="tag">Multimodal & Diffusion</div><h1>🖼️ Image Generation Pipeline</h1><p>Text → image: CLIP, VAE, U-Net, schedulers — how DALL-E and Stable Diffusion work.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="vlm"><div class="section-header"><div class="tag">Multimodal & Diffusion</div><h1>👁️ Vision-Language Models (VLMs)</h1><p>Models that see and read — GPT-4V, Claude Vision, Gemini, LLaVA.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ PRODUCTION ════════ -->
-<div class="section" id="latency"><div class="section-header"><div class="tag">Production & Reliability</div><h1>⏱️ Latency & Throughput</h1><p>TTFT, TPS, batching — making LLM APIs fast enough for production.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="streaming"><div class="section-header"><div class="tag">Production & Reliability</div><h1>📡 Streaming Responses</h1><p>SSE and chunked transfer — how to stream tokens as they're generated.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="costopt"><div class="section-header"><div class="tag">Production & Reliability</div><h1>💰 Cost Optimization</h1><p>Token budgets, model routing, batching — keeping LLM costs from exploding.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="llmcaching"><div class="section-header"><div class="tag">Production & Reliability</div><h1>💾 Caching LLM Responses</h1><p>Semantic caching, prompt caching, KV cache — when to cache and how.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="promptinjection"><div class="section-header"><div class="tag">Production & Reliability</div><h1>🛡️ Prompt Injection & Security</h1><p>Jailbreaks, indirect injection, data exfiltration — securing AI applications.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="guardrails"><div class="section-header"><div class="tag">Production & Reliability</div><h1>🚧 Guardrails & Validation</h1><p>Input/output validation, content filtering, structured output enforcement.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="observability"><div class="section-header"><div class="tag">Production & Reliability</div><h1>🔭 Observability & Tracing</h1><p>LangSmith, Langfuse — tracing every step of your LLM pipeline.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="evals"><div class="section-header"><div class="tag">Production & Reliability</div><h1>📊 Evals & Benchmarking</h1><p>How to measure if your AI system is actually good — beyond vibes.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ KEY TECHNOLOGIES ════════ -->
-<div class="section" id="openai"><div class="section-header"><div class="tag">Models & APIs</div><h1>🟢 OpenAI API</h1><p>GPT-4o, embeddings, DALL-E, Whisper — the OpenAI ecosystem.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="claude"><div class="section-header"><div class="tag">Models & APIs</div><h1>🟠 Claude (Anthropic)</h1><p>Claude 3.5+, tool use, vision, long context — the Anthropic ecosystem.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="gemini"><div class="section-header"><div class="tag">Models & APIs</div><h1>🔵 Gemini (Google)</h1><p>Gemini 1.5+, multimodal, Vertex AI, Gemini API — the Google ecosystem.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="pinecone"><div class="section-header"><div class="tag">Vector Stores</div><h1>🌲 Pinecone</h1><p>Managed vector database — serverless, fast, built for production RAG.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="chroma"><div class="section-header"><div class="tag">Vector Stores</div><h1>🎨 Chroma</h1><p>Open-source, embeddable vector store — the easiest way to start with RAG.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="weaviate"><div class="section-header"><div class="tag">Vector Stores</div><h1>⚡ Weaviate</h1><p>Open-source vector database with built-in ML modules and hybrid search.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="pgvector"><div class="section-header"><div class="tag">Vector Stores</div><h1>🐘 pgvector</h1><p>Vector search inside PostgreSQL — no new infra, just an extension.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="ollama"><div class="section-header"><div class="tag">Infra & Serving</div><h1>🦙 Ollama</h1><p>Run Llama, Mistral, Phi and more locally — zero cloud, full control.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-<div class="section" id="vllm"><div class="section-header"><div class="tag">Infra & Serving</div><h1>⚡ vLLM</h1><p>High-throughput LLM serving with PagedAttention — production-grade inference.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full concept breakdown using the GenAI learning framework.</p></div></div>
-
-<!-- ════════ PATTERNS ════════ -->
-<div class="section" id="p-rag"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 RAG Pattern</h1><p>The standard pattern for grounding LLM responses in your own data.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-agent"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Agent Loop Pattern</h1><p>Reason → tool call → observe → repeat. The backbone of every AI agent.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-multiagent"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Multi-Agent Pattern</h1><p>Orchestrator routes tasks to specialized sub-agents and merges results.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-memory"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Memory Pattern</h1><p>Injecting relevant past context into the prompt at the right moment.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-streaming"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Streaming Pattern</h1><p>Stream tokens to the UI as they're generated — no waiting for full response.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-caching"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Caching Pattern</h1><p>Semantic and exact caching to cut cost and latency on repeated queries.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-eval"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Eval Pattern</h1><p>Automated evaluation loops to catch regressions in your AI pipeline.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-guardrail"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Guardrail Pattern</h1><p>Input/output classifiers that run in parallel to the main LLM call.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-fanout"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Fan-out Pattern</h1><p>Send one query to multiple LLM calls in parallel, then merge results.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-summarize"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Summarization Pattern</h1><p>Map-reduce and hierarchical summarization for long documents.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-<div class="section" id="p-toolrouter"><div class="section-header"><div class="tag">Pattern</div><h1>🧩 Tool Router Pattern</h1><p>LLM decides which tool to call based on the query — dynamic dispatch.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full pattern breakdown with diagram, code sketch, and trade-offs.</p></div></div>
-
-<!-- ════════ QUESTION BREAKDOWNS ════════ -->
-<div class="section" id="q-chatgpt"><div class="section-header"><div class="tag">Question Breakdown</div><h1>💬 Design ChatGPT</h1><p>How would you design a scalable conversational AI product from scratch?</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-copilot"><div class="section-header"><div class="tag">Question Breakdown</div><h1>👨‍💻 Design GitHub Copilot</h1><p>Real-time code completion with LLMs — latency, context, and accuracy.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-cursor"><div class="section-header"><div class="tag">Question Breakdown</div><h1>⌨️ Design Cursor AI</h1><p>Agentic coding IDE — code understanding, RAG over codebase, multi-step edits.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-perplexity"><div class="section-header"><div class="tag">Question Breakdown</div><h1>🔍 Design Perplexity</h1><p>AI search with citations — web retrieval, RAG, answer synthesis at scale.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-docsearch"><div class="section-header"><div class="tag">Question Breakdown</div><h1>📄 Document Search Bot</h1><p>RAG over a corpus of PDFs — ingestion, chunking, retrieval, generation.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-codeassist"><div class="section-header"><div class="tag">Question Breakdown</div><h1>💻 Code Assistant</h1><p>Context-aware code help with RAG over your codebase and docs.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-emailagent"><div class="section-header"><div class="tag">Question Breakdown</div><h1>📧 Email Agent</h1><p>Agent that reads, drafts, and responds to emails — tool use over Gmail.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-researchagent"><div class="section-header"><div class="tag">Question Breakdown</div><h1>🔬 Research Agent</h1><p>Multi-step web research, summarization, and synthesis into a report.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-customerservice"><div class="section-header"><div class="tag">Question Breakdown</div><h1>🎧 Customer Service Agent</h1><p>RAG + tool use for support — escalation, ticket creation, policy lookup.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-codegen"><div class="section-header"><div class="tag">Question Breakdown</div><h1>⚙️ Code Generation Agent</h1><p>Plan → write → test → fix — a full code generation loop with tools.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-imagegen"><div class="section-header"><div class="tag">Question Breakdown</div><h1>🖼️ Image Generation System</h1><p>Prompt → diffusion model → image delivery at scale.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-<div class="section" id="q-videoanalysis"><div class="section-header"><div class="tag">Question Breakdown</div><h1>🎥 Video Analysis Pipeline</h1><p>Frame extraction, VLM inference, summarization — video understanding at scale.</p></div><div class="coming-soon"><div class="cs-icon">🚧</div><h3>Coming Soon</h3><p>Full question breakdown with system diagram and component decisions.</p></div></div>
-
+  <div id="content"></div>
 </main>
 
-<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
-<script>
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  const sec = document.getElementById(id);
-  if (sec) sec.classList.add('active');
-  const nav = document.getElementById('nav-' + id);
-  if (nav) {
-    nav.classList.add('active');
-    const items = nav.closest('.sidebar-group-items');
-    if (items) {
-      items.classList.add('open');
-      const header = items.previousElementSibling;
-      if (header) header.classList.add('open');
-    }
-  }
-  const main = document.getElementById('main');
-  main.scrollTop = 0;
-}
-
-function toggleGroup(header) {
-  header.classList.toggle('open');
-  const items = header.nextElementSibling;
-  if (items) items.classList.toggle('open');
-}
-
-function openGroup(name) {
-  document.querySelectorAll('.sidebar-group-header').forEach(h => {
-    if (h.textContent.trim().startsWith(name)) {
-      h.classList.add('open');
-      const items = h.nextElementSibling;
-      if (items) items.classList.add('open');
-    }
-  });
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') showSection('home');
-});
-</script>
+<script src="assets/app.js"></script>
 </body>
 </html>
