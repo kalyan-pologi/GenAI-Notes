@@ -32,6 +32,37 @@ notes/*.html           → Individual topic files (91 total)
 
 4. Commit with clear message: `Add: Claude vision capabilities`
 
+## Diagrams & Text-with-Images in Notes
+
+To explain a concept with a diagram next to the text (Excalidraw-style flowcharts, etc.):
+
+1. **Wrap prose in `.note-body`** so text uses the correct scoped sizes (raw `<h2>`/`<p>` inherit oversized browser defaults):
+   ```html
+   <div class="note-body">
+     <h2>Section title</h2>
+     <p>Explain the concept. Use <b>bold</b> for key terms and <code>/commands</code>.</p>
+
+     <figure class="note-figure">
+       <img src="assets/img/diagram-name.svg" alt="Describe the diagram for accessibility">
+       <figcaption>Short caption</figcaption>
+     </figure>
+
+     <p>Continue the explanation after the image.</p>
+   </div>
+   ```
+
+2. **Create diagrams as hand-drawn-style SVG** in `assets/img/` (not real Excalidraw files — code-generated SVGs that mimic the look):
+   - `viewBox` sized to content; `font-family:'Comic Sans MS','Segoe Print',cursive`
+   - A `feTurbulence` + `feDisplacementMap` filter (`scale≈3.5`) for the hand-drawn wobble
+   - Green `#5fbf72` / red `#ec6a3c` / grey `#f4f4f4` boxes, dark `#2b2b2b` strokes, arrowhead markers
+   - Validate it parses: `python -c "import xml.dom.minidom as m; m.parse('assets/img/NAME.svg')"`
+
+3. **Paths are relative to `index.html` (root)** — always `assets/img/...`, never `../assets/...`.
+
+4. Image styling is already in `style.css`: `.note-figure img` caps width at **520px** and centers — don't let diagrams fill the page.
+
+5. SVG is preferred (crisp at any zoom, tiny files). Exported PNG works too if the user provides one.
+
 ## CSS Classes
 
 - `.section-header`, `.tag` → Headers
