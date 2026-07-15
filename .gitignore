@@ -1,5 +1,6 @@
-# Claude
+# Claude (but keep instructions)
 .claude/
+!.claude/instructions.md
 
 # Node
 node_modules/
