@@ -1,7 +1,7 @@
 <div class="section-header">
   <div class="tag">Claude Code</div>
   <h1>⌨️ Claude Code</h1>
-  <p>Claude with hands — an agent that lives in your terminal/IDE and acts on your machine. Crash-course revision notes.</p>
+  <p>Claude with hands: an intelligent agent that lives in your terminal, IDE, or desktop app and can act directly on your machine. Quick reference guide for setup, configuration, and core concepts.</p>
 </div>
 
 <div class="note-body">
@@ -9,27 +9,35 @@
 <!-- 1 · WHAT IT IS -->
 <h2>1 · What Claude Code is</h2>
 <p>
-  Claude (claude.ai / desktop) is a <b>brain</b> — it can only talk. Claude Code is the
-  <b>same brain with hands</b>: it reads, writes &amp; edits files, runs terminal commands, and
-  calls tools — all on your machine. That's why it must be <b>installed</b> and why it asks for
-  <b>permission</b> before acting. Everything runs on the <b>agentic loop</b>.
+  Claude (claude.ai or desktop app) is a <b>brain</b> that can only chat and reason. Claude Code is the
+  <b>same brain with hands</b>: it can read, write, and edit files on your disk, run terminal commands,
+  call external APIs, and interact with tools. All execution happens on your machine (not a remote server).
+  That's why it requires installation and asks for permission before taking actions. Everything operates via the <b>agentic loop</b>.
 </p>
+<div class="note"><b>Key difference:</b> Claude chat is passive (answers questions). Claude Code is active (makes changes, runs code, automates tasks).</div>
 
 <figure class="note-figure">
   <img src="assets/img/agentic-loop.svg" alt="Loop: your prompt goes to Think, then Act with a tool, then Observe the result; it loops until done, then returns the final answer">
-  <figcaption>The agentic loop — think → act → observe → repeat</figcaption>
+  <figcaption>The agentic loop: think, act, observe, repeat until task complete</figcaption>
 </figure>
 
+<div class="note">
+  <b>The loop works like this:</b> You send a prompt. Claude thinks and decides what to do. It calls a tool (read a file, run bash, etc.).
+  The tool runs and Claude observes the result. If the task isn't done, it loops back to think about the next step.
+  This repeats until Claude decides the task is complete and returns an answer.
+</div>
+
 <!-- 2 · SETUP & COST -->
-<h2>2 · Setup &amp; cost</h2>
+<h2>2 · Setup and cost</h2>
 <div class="grid2">
   <div class="card c3">
-    <h3>Install &amp; check</h3>
-    <div class="b">Install via the official command (macOS/Linux terminal, Windows PowerShell/cmd)</div>
-    <div class="b"><b><code>claude doctor</code></b> diagnoses install, node, and PATH issues</div>
-    <div class="b">Windows: add to <b>PATH</b> if <code>claude</code> command is "not recognized"</div>
-    <div class="b">Run in terminal, VS Code, Cursor, JetBrains extensions, or desktop app</div>
-    <div class="b">Requires Node.js 18+ to be installed on your system</div>
+    <h3>Install and check</h3>
+    <div class="b">Install via the official npm command (macOS/Linux terminal, Windows PowerShell/cmd): <code>npm install -g claude</code></div>
+    <div class="b"><b><code>claude doctor</code></b> runs diagnostics to check installation, Node.js version, and PATH configuration</div>
+    <div class="b">Windows: manually add Claude to your PATH if the command isn't recognized; use <code>where claude</code> to verify</div>
+    <div class="b">Run in terminal (bash, zsh, PowerShell), VS Code extension, Cursor, JetBrains IDEs, or standalone desktop app</div>
+    <div class="b">Requires Node.js 18 or later; check your version with <code>node --version</code></div>
+    <div class="b">Installation takes ~2 minutes; first launch will prompt for Anthropic API key or subscription login</div>
   </div>
   <div class="card c4">
     <h3>Paying for it (not free)</h3>
@@ -40,14 +48,17 @@
   </div>
 </div>
 
-<div class="sl">Model tiers choose the right one for your task</div>
+<div class="sl">Model tiers: choose based on task complexity and speed needs</div>
 <div class="row"><span class="k">Haiku</span><span class="v">Fastest and cheapest; use for simple tasks, maintenance, quick lookups</span></div>
 <div class="row"><span class="k">Sonnet</span><span class="v">Balanced performance; everyday building and most work (recommended default)</span></div>
 <div class="row"><span class="k">Opus</span><span class="v">Most powerful; for planning, architecture, hard problems (burns limit faster)</span></div>
-<div class="note">Typical flow: <b>Opus to plan</b>, <b>Sonnet to build</b>, <b>Haiku to maintain/debug</b>. Switch with <code>/model</code>.</div>
+<div class="note">
+  <b>Typical workflow:</b> Use Opus for complex architecture decisions and planning, switch to Sonnet for implementation and most daily work, then drop to Haiku for bug fixes and maintenance.
+  Each model change costs a few tokens but saves money in the long run. Switch models mid-session using <code>/model</code>.
+</div>
 
 <!-- 3 · COMMANDS, MODES, SESSIONS -->
-<h2>3 · Commands, modes &amp; sessions</h2>
+<h2>3 · Commands, modes and sessions</h2>
 <p>Slash commands are keyboard-shortcut-style controls that don't consume conversation context and cost no tokens.</p>
 <div class="grid3">
   <div class="card c1">
@@ -77,7 +88,11 @@
     <div class="b"><b>Bypass</b> (risky) skips all prompts; avoid unless you trust everything</div>
   </div>
 </div>
-<div class="note"><b>Sessions</b> are saved automatically with ID, history, and changes. Don't start fresh every day. Use <code>/resume</code> to keep your context and previous work. Exit cleanly with <code>exit</code> command.</div>
+<div class="note">
+  <b>Sessions</b> are saved automatically with unique ID, full chat history, and uncommitted code changes.
+  Don't start a fresh session every day: resuming old sessions via <code>/resume</code> keeps your accumulated context, memory, and in-progress work.
+  Always exit cleanly with the <code>exit</code> command (not Ctrl+C) so your session saves properly.
+</div>
 
 <!-- 4 · CLAUDE.md -->
 <h2>4 · CLAUDE.md: the project brain</h2>
@@ -104,9 +119,10 @@
   </div>
 </div>
 <div class="note">
-  <b>Quality over quantity.</b> 60 relevant lines beat 400 irrelevant ones. LLMs follow about 150–200 instructions well, then quality degrades.
-  <b>Primacy/recency:</b> put most important rules at top and bottom. Scope precedence: enterprise settings override global ~/.claude, which override project .claude, which override local settings.
-  Treat CLAUDE.md like tech debt: prune regularly, don't grow unbounded.
+  <b>Quality over quantity:</b> 60 focused lines beat 400 rambling paragraphs. LLMs follow about 150 to 200 well-written instructions effectively; beyond that, quality degrades significantly.
+  <b>Primacy and recency:</b> place the most critical rules at the very top and very bottom of CLAUDE.md so they stick in the model's memory.
+  <b>Scope precedence:</b> enterprise settings override global ~/.claude, which override project .claude/, which override local settings.json.
+  Treat CLAUDE.md like tech debt: review and prune it regularly; don't let it grow unbounded over time.
 </div>
 
 <!-- 5 · CONTEXT -->
