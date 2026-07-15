@@ -378,7 +378,13 @@ body{
 /* ─── SCROLLBAR HIDDEN ─────────────────────────────────────── */
 #main::-webkit-scrollbar{width:5px}
 
+/* --- Note body typography --- */
+.note-body h2{font-size:19px;font-weight:700;margin:28px 0 10px;color:var(--text)}
+.note-body p{font-size:14px;line-height:1.7;color:var(--muted2);margin:0 0 14px}
+.note-body b,.note-body strong{color:var(--text);font-weight:600}
+.note-body code{font-family:'JetBrains Mono',monospace;font-size:12.5px;background:rgba(255,255,255,.06);padding:1px 6px;border-radius:5px}
+
 /* --- Note diagrams / figures --- */
 .note-figure{margin:1.8rem 0;text-align:center;}
-.note-figure img{max-width:100%;height:auto;border:1px solid #eee;border-radius:10px;background:#fff;padding:8px;}
+.note-figure img{display:block;max-width:520px;width:100%;height:auto;margin:0 auto;border:1px solid #eee;border-radius:10px;background:#fff;padding:8px;}
 .note-figure figcaption{font-size:.85rem;color:#888;margin-top:.6rem;font-family:'JetBrains Mono',monospace;}
